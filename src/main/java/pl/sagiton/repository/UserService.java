@@ -1,6 +1,10 @@
 package pl.sagiton.repository;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
+import pl.sagiton.model.MyUser;
+import pl.sagiton.model.UserJDBCTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +21,19 @@ public class UserService {
 
         Map<String, String> userMap = new HashMap<String, String>();
 
-        if(!username.equals("Johny") && !username.equals("Donna") && !username.equals("James")) return null;
+        ApplicationContext context =
+                new ClassPathXmlApplicationContext("Beans.xml");
 
-        userMap.put("username", username);
-        userMap.put("password", username + "123");
+        UserJDBCTemplate userJDBCTemplate =
+                (UserJDBCTemplate)context.getBean("userJDBCTemplate");
+
+        MyUser user = userJDBCTemplate.getUser(username);
+        if(user == null) return null;
+
+
+        userMap.put("username", user.getUsername());
+        userMap.put("password", user.getUser_password());
+
 
         return userMap;
     }
