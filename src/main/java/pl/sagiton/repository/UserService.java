@@ -1,5 +1,6 @@
 package pl.sagiton.repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,7 @@ public class UserService {
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("Beans.xml");
 
-        UserJDBCTemplate userJDBCTemplate =
-                (UserJDBCTemplate)context.getBean("userJDBCTemplate");
+        UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate)context.getBean("userJDBCTemplate");
 
         MyUser user = userJDBCTemplate.getUser(username);
         if(user == null) return null;
