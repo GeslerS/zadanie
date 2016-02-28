@@ -9,6 +9,7 @@
   <url>http://maven.apache.org</url>
   <dependencies>
     <!--Test dependency -->
+    <dependency><groupId>org.springframework</groupId><artifactId>spring-test</artifactId><version>4.2.5.RELEASE</version></dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
