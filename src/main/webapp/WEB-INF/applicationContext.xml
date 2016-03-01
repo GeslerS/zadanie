@@ -15,10 +15,26 @@
     <mvc:annotation-driven />
     <context:component-scan base-package="pl.sagiton" />
 
+    <mvc:view-controller path="/login" view-name="login" />
     <http use-expressions="true" auto-config="false" >
         <csrf disabled="true" />
-        <form-login login-page="/login" default-target-url="/home" authentication-failure-url="/wrong" />
+        <form-login login-page="/login" default-target-url="/logged" authentication-failure-url="/wrong" />
+        <intercept-url pattern="/logged" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/wrong" access="permitAll"/>
     </http>
 
-    <mvc:view-controller path="/login" view-name="login" />
+
+    <beans:bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <beans:property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/UsersDB"/>
+        <beans:property name="username" value="root"/>
+        <beans:property name="password" value="haslo12345"/>
+    </beans:bean>
+
+
+    <beans:bean id="userDAOImpl"
+          class="pl.sagiton.model.UserDAOImpl">
+        <beans:property name="dataSource"  ref="dataSource" />
+    </beans:bean>
 </beans:beans>

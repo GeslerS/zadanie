@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.stereotype.Service;
-import pl.sagiton.repository.UserService;
+import pl.sagiton.model.MyUser;
+import pl.sagiton.model.UserDAOImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -22,21 +22,18 @@ import java.util.Map;
 public class MyUserDetailsService implements UserDetailsService{
 
     @Autowired
-    UserService userService;
+    private UserDAOImpl userDaoImpl;
 
 
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Map<String, String> userMap = userService.getUserDetails(s);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        if(userMap == null) throw new UsernameNotFoundException("User doesn't exist (" + s +")");
+        MyUser user = userDaoImpl.getUser(username);
 
-        String username = userMap.get("username");
-        String password = userMap.get("password");
+        if(user == null) throw new UsernameNotFoundException("User doesn't exist (" + username +")");
+
         List authList = new ArrayList();
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-
-
-       return new User(username, password, authList);
+        return new User(user.getName(), user.getPassword(), authList);
     }
 }
